@@ -1,0 +1,48 @@
+#install java
+sudo apt-get update
+sudo apt-get install openjdk-8-jre
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install ssh
+sudo apt-get install rsync 
+
+#download hbase from web
+sudo wget http://ftp.heanet.ie/mirrors/www.apache.org/dist/hbase/stable/hbase-1.4.8-bin.tar.gz
+#unzip the tar file 
+sudo tar xzf hbase-1.4.8-bin.tar.gz
+#remove tar file post unzip 
+sudo rm -r hbase-1.4.8-bin.tar.gz
+
+#create a usergroup and username
+sudo addgroup hadoop 
+sudo adduser --ingroup hadoop hduser
+sudo adduser hduser sudo
+su - hduser 
+ssh-keygen -t rsa -P ""
+cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys 
+ssh localhost 
+exit 
+sudo chown -R hduser:hadoop hbase-1.4.8
+
+
+#create a working directory for hbase
+cd..
+sudo mkdir data
+#create another dir
+cd data
+Sudo mkdir hbase
+sudo chown -R hduser:hadoop data
+sudo chown -R hduser:hadoop hbase
+
+
+#Edit the conf file
+sudo nano hbase-site.xml
+
+<property>
+ <name>hbase.rootdir</name>
+ <value>file:///usr/data/hbase</value>
+ </property>
+
+
+
+#edit hbase-env.sh for java path
+export JAVA_HOME= /usr/lib/jvm/java-8-openjdk-amd64
